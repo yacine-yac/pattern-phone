@@ -1,0 +1,56 @@
+body{font-family: Verdana, sans-serif;
+    padding: 0px;margin: 0px;position: relative;display: flex;
+    top: 0%; left: 0%;right: 0%;bottom: 0%;align-items: center;align-content: center;display: flex;
+}
+.cd00{width: 100%;height: 100vh;position: absolute;z-index:10;background-color:rgba(49, 49, 49, 0.534);display: flex;
+    align-items: center;align-content: center;display: flex; top: 0px;left: 0px;right: 0px;bottom: 0px;}
+.cd01{border-radius: 150px;margin: auto;display: block;
+    width: 45%;height: 65%;background-color: rgb(41, 53, 63);box-shadow: 3px 3px 3px 3px rgb(126, 124, 124);
+}
+.cd01 p{margin: 0px;width:70%;text-align: justify;margin: auto;
+    color: white; font-size: 17px;padding: 6px 0px 30px 0px;
+}
+.logo{width: 100%;height: 25%; text-align: center;margin-top: 5%;}
+.logo img{width: 15%;height: 70%;margin-top: 25px;}
+.btn{width: 100%;height: 10%; text-align: center;}
+.btn button{border: 0px;outline: none;width: 45%;height: 30px;color: white;cursor: pointer;
+background-color: rgb(233, 82, 13);margin: auto;}
+.btn button:hover{
+    background-color: rgb(148, 57, 15);transition: 0.45s ease;color: aliceblue;
+}
+.cd0{width: 100%;height: 100vh;background-color: rgb(244, 244, 245);position: relative;
+    align-items: center;align-content: center;display: flex; top: 0px;left: 0px;right: 0px;bottom: 0px;
+}
+.cd0 .cd1{margin: auto;
+    width: 300px;height: 400px;background-color: rgb(40, 53, 66); 
+    align-content: center;box-shadow: 3px 3px 3px 0px rgb(38, 47, 49);
+}
+.cd0 .cd1 .cd11{
+    width: 100%;height: 20%; background-color: rgb(15, 34, 51); display: block;
+}
+.cd1 .cd11 .cd112{
+  width: 100%;  display: flex;  top: 0%; left: 0%;right: 0%;bottom: 0%;align-items: center;align-content: center;
+}
+.cd1 .cd11 .cd112 span{width: 100%; color: rgb(245, 31, 156);font-size: 17px;text-align: center;margin-top: 20px;}
+.cd1 .cd12{
+    width: 100%;height: 80%; 
+    display: flex; top: 0%; left: 0%;right: 0%;bottom: 0%;align-items: center;align-content: center;
+   
+}
+.cd1 .cd12 .cd121{cursor:pointer;
+    -ms-user-select: none;overflow: hidden;
+    user-select: none;margin: auto;
+    width: 70%;height: 70%; border: 1px solid rgb(42, 50, 71);
+    justify-content: space-around; 
+    position: relative;z-index: 0;
+}
+.cd1 .cd12 .cd121 svg{position: relative;margin: 10px 7px; 
+    width: 100px;height: 80px; }
+.cd1 .cd12 .cd121 svg circle{display: inline-block;justify-content: space-between;
+     background: aquamarine;fill: rgb(49, 71, 78);stroke: aliceblue;stroke-width: 2px;
+} 
+.cd1 .cd12 .cd121 hr{top:var(--top);left: var(--left);transform-origin:left;-ms-transform-origin-y:0px;
+    align-items: flex-start; transform: translate(0px,0px);border: 0px;
+    height:4.5px ;width:var(--width); position: absolute;z-index:20; background-color: rgba(251, 76, 7, 0.733);margin: 0px;
+ 
+} 
