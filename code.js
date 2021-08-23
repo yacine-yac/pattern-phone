@@ -129,6 +129,7 @@ for(x=0;x<svg_cirlces.length;x++){
     document.addEventListener('mouseup',before_stop);
    });   
 }
+
 var cd0=document.getElementsByClassName('cd0');
 var cd00=document.getElementsByClassName('cd00');
  
