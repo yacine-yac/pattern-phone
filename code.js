@@ -79,6 +79,7 @@ function get_intersection(x,y){
 function stop_function(last_hr,f_remove=how_function[type_sch]){ 
 if(shema.length>0){   
   document.removeEventListener("mousemove",f_remove);
+  document.removeEventListener("touchmove",f_remove);
  if(last_hr!=="circle" && tag_hr.length>0){ 
         tag_hr[0].remove();
   }
@@ -87,6 +88,7 @@ if(shema.length>0){
            Array.from(tag_hr).forEach((x)=>{x.remove()});
            shema=[];
           document.removeEventListener('mousedown',before_stop);
+          document.removeEventListener('touchstart',before_stop);
 
   },400);  
 } 
@@ -95,6 +97,7 @@ function hr_creation(seg){
   let hr=`<hr class="${seg}">`;  
   cd121.insertAdjacentHTML("afterbegin",hr);
 }
+let c=0;
 let how_function={
   "w_line":function move_circule(t){
      if(t.target.nodeName==="circle"){ 
@@ -106,30 +109,56 @@ let how_function={
         } 
     }
   },
-  'line':function move_hr(t){
+  'line':function move_hr(t){  
     if(t.target.nodeName==="circle"){
-      if(shema.includes(t.target.getAttribute('value'))===false){  
+      if(shema.includes(t.target.getAttribute('value'))===false){
          shema.push(t.target.getAttribute('value'));
          manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.target.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
          circle_css([t.target],true); 
+      }else{ c++;
+       // response_msg.textContent= c+t.target.nodeName;
       }
     }else{  
        manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-1]),...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),tag_hr[0].className);
     }
   }
 };
-function before_stop(event){stop_function(event.target.nodeName);}
-for(x=0;x<svg_cirlces.length;x++){  
-   svg_cirlces[x].addEventListener('mousedown',function(e){
-      
-    shema.push(this.getAttribute('value')); 
+function before_stop(event){ stop_function(event.target.nodeName);}
+function start(e){ 
+   shema.push(this.getAttribute('value')); 
     tag_hr=document.getElementsByTagName('hr');
     circle_css([this],true);
     document.addEventListener('mousemove',how_function[type_sch]);
     document.addEventListener('mouseup',before_stop);
-   });   
+   // document.addEventListener('touchmove',how_function[type_sch]);
+   document.addEventListener('touchmove',function(e){
+   
+   let t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);
+ 
+   
+    if(t.nodeName==="circle"){  response_msg.textContent=  c+'cccmalki'+ t;
+      if(shema.includes(t.getAttribute('value'))===false){
+        
+         shema.push(t.getAttribute('value'));
+         manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
+         circle_css([t],true); 
+      }else{ c++;
+       // response_msg.textContent= c+t.target.nodeName;
+      }
+    }else{  
+       manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-1]),...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),tag_hr[0].className);
+    }
+  
+    });
+   document.addEventListener('touchend',before_stop);
+}
+
+    
+for(x=0;x<svg_cirlces.length;x++){  
+   svg_cirlces[x].addEventListener('mousedown',start);
+   svg_cirlces[x].addEventListener('touchstart',start);   
 }
 
 var cd0=document.getElementsByClassName('cd0');
-var cd00=document.getElementsByClassName('cd00');
+var cd00=document.getElementsByClassName('cd00'); 
  
