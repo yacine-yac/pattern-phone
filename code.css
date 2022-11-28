@@ -95,8 +95,7 @@ background-color: rgb(233, 82, 13);margin: auto;}
 .title{color:var(--color-second);text-align: center;} 
 
 /* pattern block*/
-.cd1 div:nth-child(2){ 
-    border: 1px solid rgb(140, 255, 0); 
+.cd1 div:nth-child(2){  
     display: grid;
     grid-template-columns: repeat(3,1fr);
     grid-template-rows: repeat(3,1fr); 
@@ -104,10 +103,18 @@ background-color: rgb(233, 82, 13);margin: auto;}
 }
 .cd1 svg circle{ 
     background: var(--svg-bg);
+} 
+.circle{
     fill: var(--fill-svg);
     stroke: var(--svg-stroke);
     stroke-width: 20px;
-} 
+}
+.circle-active{
+    stroke:  white ;stroke-width:  50px ;fill: rgb(251, 76, 7) ;
+}
+
+
+
  
 /* line between circles */
 .cd1 hr{top:var(--top);left: var(--left);transform-origin:left;-ms-transform-origin-y:0px;

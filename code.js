@@ -1,6 +1,6 @@
 const cd121=document.getElementById('cd121'),
 svg_cirlces=document.querySelectorAll('svg circle');
-let response_msg=document.getElementById('response_msg');
+// let response_msg=document.getElementById('response_msg'); N
 var tag_hr;
 var state=false;
 let shema=[],premession_cookie=false;
@@ -8,8 +8,10 @@ let center_circle={};
 let cookie_array=document.cookie.split('=');
 const type_sch=cd121.getAttribute('data-value');
 
-let mine_shema={};
-(function get_center(){
+// let mine_shema={}; N
+
+/** determined the center of each circle */ 
+(function(){
   svg_cirlces.forEach((x)=>{
        bondi_position=x.parentElement.getBoundingClientRect();
        center_circle[x.getAttribute('value')]=[
@@ -18,21 +20,25 @@ let mine_shema={};
        ];
   });
 })(); 
-let css={
-  true:["white","10px","rgb(251, 76, 7)"],
-  false:["aliceblue",'2px',"rgb(49, 71, 78)"]
-}
-function circle_css(css_variavle,choice){  
-  css_variavle.forEach((x)=>{
-            x.style.stroke=css[choice][0];
-            x.style.strokeWidth=css[choice][1];
-            x.style.fill=css[choice][2];
-            x.style.transition="0.3s ease";
-  }); 
- // console.log(arguments);
-  if(choice===true){ hr_creation(css_variavle[0].getAttribute('value'));}
+
  
+/**
+ *  Handle the active circle 
+ * @param {*} circle The circle which will be active 
+ * @returns void 
+ */
+function turnCircleActive(circle){  
+  circle.classList.add("circle-active") ; 
 }
+/** Turn All circles inactive using svg_cirlces elements
+ *  @return void
+ */
+function clearCircle(){
+  Array.from(svg_cirlces,x=>{ 
+    x.classList.replace("circle-active",'cirlce');
+  });
+}
+
 function geo(y1,x1,y2,x2){
   
    x_mouse=x1-x2;
@@ -83,10 +89,10 @@ if(shema.length>0){
  if(last_hr!=="circle" && tag_hr.length>0){ 
         tag_hr[0].remove();
   }
-   setTimeout(()=>{ 
-           circle_css(Array.from(svg_cirlces).filter(x=>shema.includes(x.getAttribute('value'))),false);
-           Array.from(tag_hr).forEach((x)=>{x.remove()});
-           shema=[];
+   setTimeout(()=>{
+          clearCircle(); 
+          Array.from(tag_hr).forEach((x)=>{x.remove()});
+          shema=[];
           document.removeEventListener('mousedown',before_stop);
           document.removeEventListener('touchstart',before_stop);
 
@@ -104,7 +110,8 @@ let how_function={
      
         if(shema.includes(t.target.getAttribute('value'))===false){ 
                 shema.push(t.target.getAttribute('value'));
-                circle_css([t.target],true);
+                turnCircleActive( t.target ,true);
+                hr_creation(t.target.getAttribute('value'));
                 document.documentElement.style.setProperty('--width',t.offsetX+"px");
         } 
     }
@@ -114,7 +121,8 @@ let how_function={
       if(shema.includes(t.target.getAttribute('value'))===false){
          shema.push(t.target.getAttribute('value'));
          manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.target.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
-         circle_css([t.target],true); 
+         turnCircleActive( t.target ,true); 
+         hr_creation(t.target.getAttribute('value'));
       }else{ c++;
        // response_msg.textContent= c+t.target.nodeName;
       }
@@ -127,7 +135,8 @@ function before_stop(event){ stop_function(event.target.nodeName);}
 function start(e){ 
    shema.push(this.getAttribute('value')); 
     tag_hr=document.getElementsByTagName('hr');
-    circle_css([this],true);
+    turnCircleActive( this ,true);
+    hr_creation(this.getAttribute('value'));
     document.addEventListener('mousemove',how_function[type_sch]);
     document.addEventListener('mouseup',before_stop);
    // document.addEventListener('touchmove',how_function[type_sch]);
@@ -136,12 +145,14 @@ function start(e){
    let t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);
  
    
-    if(t.nodeName==="circle"){  response_msg.textContent=  c+'cccmalki'+ t;
+    if(t.nodeName==="circle"){ 
+       // response_msg.textContent=  c+'cccmalki'+ t;
       if(shema.includes(t.getAttribute('value'))===false){
         
          shema.push(t.getAttribute('value'));
          manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
-         circle_css([t],true); 
+         turnCircleActive( t ,true); 
+         hr_creation(t.getAttribute('value'));
       }else{ c++;
        // response_msg.textContent= c+t.target.nodeName;
       }
