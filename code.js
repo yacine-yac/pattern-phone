@@ -80,21 +80,34 @@ function geo(y1,x1,y2,x2){
   return [angle,position_mouse];
 }
 
+/**
+ * calcule the current Mouse position on the circle 
+ * @param {*} element  represent the current circle 
+ * @returns {top,left} it returns the position left and top
+ */
+function calculPosition(element){
+  const top=element.parentElement.getBoundingClientRect().height/2+element.parentElement.getBoundingClientRect().top;
+  const left=(element.parentElement.getBoundingClientRect().width/2+element.parentElement.getBoundingClientRect().left);
+  return {top,left}
+}
 
 
 /**
  * take a suitable position for the line 
- * @param {HTMLElement} element Origin point where we start
+ * @param {HTMLElement} position  it's the position of line {left,top}
  * @param {number} angle   Direction of the ligne following the mouse 
  * @param {number} height  The height of the line 
- * @param {string} seg Classname 
+ * @param {string} seg id of the line  
  * @return void 
  */
-function manipulation_css(element,angle=0,height=0,seg){ 
-  document.getElementById(seg).style.transform=`rotate(${Math.round(angle)}deg)`;
-  document.getElementById(seg).style.width=`${height-5}px`;
-  document.getElementById(seg).style.top=element.parentElement.getBoundingClientRect().height/2+element.parentElement.getBoundingClientRect().top+"px";
-  document.getElementById(seg).style.left=(element.parentElement.getBoundingClientRect().width/2+element.parentElement.getBoundingClientRect().left)+"px";
+function linePosition(position,angle=0,height=0,seg){ 
+  const {top,left}=position;
+  Object.assign(document.getElementById(seg).style,{
+        transform:`rotate(${angle}deg) `,
+        width:`${height-5}px`,
+        top:`${top}px`,
+        left:`${left}px`
+  }); 
 }
 function get_intersection(x,y){
   if(shema.length>0){
@@ -102,6 +115,7 @@ function get_intersection(x,y){
     b= (center_circle[shema[shema.length-1]][1]-y);
   }
 }
+
 function stop_function(last_hr,f_remove=how_function[type_sch]){ 
 if(shema.length>0){   
   document.removeEventListener("mousemove",f_remove);
@@ -144,7 +158,7 @@ let how_function={
     if(t.target.nodeName==="circle"){ 
       if(shema.includes(t.target.getAttribute('value'))===false){
          shema.push(t.target.getAttribute('value'));
-         manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2])
+         linePosition(calculPosition(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]))
                           ,...geo(...center_circle[t.target.getAttribute('value')]
                           ,...center_circle[shema[shema.length-2]])
                           ,tag_hr[0].id); //tag_hr[0].className
@@ -152,8 +166,8 @@ let how_function={
          hr_creation(t.target.getAttribute('value'));
       } 
     }else{  
-       manipulation_css(...Array.from(svg_cirlces).filter(f=>
-        f.getAttribute('value')==shema[shema.length-1]),
+        linePosition(calculPosition(...Array.from(svg_cirlces).filter(f=>
+        f.getAttribute('value')==shema[shema.length-1])),
         ...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),
         tag_hr[0].id);
     }
@@ -183,14 +197,14 @@ function start(e){
   //     if(shema.includes(t.getAttribute('value'))===false){
         
   //        shema.push(t.getAttribute('value'));
-  //        manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
+  //        linePosition(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
   //        turnCircleActive( t); // ,trueconsole.log('rrr',t.getAttribute('value'));
   //        hr_creation(t.getAttribute('value'));
   //     }else{ c++;
   //      // response_msg.textContent= c+t.target.nodeName;
   //     }
   //   }else{  
-  //      manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-1]),...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),tag_hr[0].className);
+  //      linePosition(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-1]),...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),tag_hr[0].className);
   //   }
   
   //   });
