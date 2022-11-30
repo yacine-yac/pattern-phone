@@ -9,16 +9,18 @@ let cookie_array=document.cookie.split('=');
 const type_sch=cd121.getAttribute('data-value');
 
 // let mine_shema={}; N
-
+const box=document.getElementById('box');
 /** determined the center of each circle */ 
 (function(){
-  svg_cirlces.forEach((x)=>{
+  svg_cirlces.forEach((x,y)=>{
        bondi_position=x.parentElement.getBoundingClientRect();
-       center_circle[x.getAttribute('value')]=[
-       bondi_position.height/2+bondi_position.top-x.parentElement.parentElement.getBoundingClientRect().top ,
-       bondi_position.width/2+bondi_position.left-x.parentElement.parentElement.getBoundingClientRect().left
-       ];
+      // console.log("circle"+y,bondi_position.top,"====================",bondi_position.left);
+      center_circle[x.getAttribute('value')]=[
+          bondi_position.height/2+bondi_position.top-x.parentElement.parentElement.getBoundingClientRect().top ,//-x.parentElement.parentElement.getBoundingClientRect().top-x.parentElement.parentElement.parentElement.getBoundingClientRect().top,   //bondi_position.top-document.getElementById('cd121').getBoundingClientRect(),//.top-x.parentElement.parentElement.getBoundingClientRect().top ,
+          bondi_position.width/2+bondi_position.left-x.parentElement.parentElement.getBoundingClientRect().left //-x.parentElement.parentElement.getBoundingClientRect().left-x.parentElement.parentElement.parentElement.getBoundingClientRect().left //bondi_position.left-document.getElementById('cd121').getBoundingClientRect()//.left-x.parentElement.parentElement.getBoundingClientRect().left
+      ];
   });
+  // console.log(center_circle);
 })(); 
 
  
@@ -38,7 +40,14 @@ function clearCircle(){
     x.classList.replace("circle-active",'cirlce');
   });
 }
-
+/**
+ * given the angle between point1 (y1,x1) and (y2,x2);
+ * @param {*} y1 
+ * @param {*} x1 
+ * @param {*} y2 
+ * @param {*} x2 
+ * @returns 
+ */
 function geo(y1,x1,y2,x2){
   
    x_mouse=x1-x2;
@@ -70,11 +79,22 @@ function geo(y1,x1,y2,x2){
   position_mouse=Math.sqrt(Math.pow(x_mouse,2)+Math.pow(y_mouse,2));
   return [angle,position_mouse];
 }
-function manipulation_css(element,angle=0,hr_length=0,seg){
-  document.getElementsByClassName(seg)[0].style.transform=`rotate(${Math.round(angle)}deg)`;
-  document.getElementsByClassName(seg)[0].style.width=`${hr_length-5}px`;
-  document.getElementsByClassName(seg)[0].style.top=element.parentElement.getBoundingClientRect().height/2+element.parentElement.getBoundingClientRect().top-element.parentElement.parentElement.getBoundingClientRect().top+"px";
-  document.getElementsByClassName(seg)[0].style.left=(element.parentElement.getBoundingClientRect().width/2+element.parentElement.getBoundingClientRect().left-element.parentElement.parentElement.getBoundingClientRect().left)+"px";
+
+
+
+/**
+ * take a suitable position for the line 
+ * @param {HTMLElement} element Origin point where we start
+ * @param {number} angle   Direction of the ligne following the mouse 
+ * @param {number} height  The height of the line 
+ * @param {string} seg Classname 
+ * @return void 
+ */
+function manipulation_css(element,angle=0,height=0,seg){ 
+  document.getElementById(seg).style.transform=`rotate(${Math.round(angle)}deg)`;
+  document.getElementById(seg).style.width=`${height-5}px`;
+  document.getElementById(seg).style.top=element.parentElement.getBoundingClientRect().height/2+element.parentElement.getBoundingClientRect().top+"px";
+  document.getElementById(seg).style.left=(element.parentElement.getBoundingClientRect().width/2+element.parentElement.getBoundingClientRect().left)+"px";
 }
 function get_intersection(x,y){
   if(shema.length>0){
@@ -99,77 +119,92 @@ if(shema.length>0){
   },400);  
 } 
 }
-function hr_creation(seg){
-  let hr=`<hr class="${seg}">`;  
+/**
+ * create Line with id in the div #cd121
+ * @param {string} id is the id of the line which is can be (x1,x2...x9)
+ */
+function hr_creation(id){
+  let hr=`<hr id="${id}">`;  
   cd121.insertAdjacentHTML("afterbegin",hr);
 }
-let c=0;
+ 
 let how_function={
   "w_line":function move_circule(t){
      if(t.target.nodeName==="circle"){ 
      
         if(shema.includes(t.target.getAttribute('value'))===false){ 
                 shema.push(t.target.getAttribute('value'));
-                turnCircleActive( t.target ,true);
+                turnCircleActive( t.target );//,true
                 hr_creation(t.target.getAttribute('value'));
                 document.documentElement.style.setProperty('--width',t.offsetX+"px");
         } 
     }
   },
   'line':function move_hr(t){  
-    if(t.target.nodeName==="circle"){
+    if(t.target.nodeName==="circle"){ 
       if(shema.includes(t.target.getAttribute('value'))===false){
          shema.push(t.target.getAttribute('value'));
-         manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.target.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
-         turnCircleActive( t.target ,true); 
+         manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2])
+                          ,...geo(...center_circle[t.target.getAttribute('value')]
+                          ,...center_circle[shema[shema.length-2]])
+                          ,tag_hr[0].id); //tag_hr[0].className
+         turnCircleActive(t.target);
          hr_creation(t.target.getAttribute('value'));
-      }else{ c++;
-       // response_msg.textContent= c+t.target.nodeName;
-      }
+      } 
     }else{  
-       manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-1]),...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),tag_hr[0].className);
+       manipulation_css(...Array.from(svg_cirlces).filter(f=>
+        f.getAttribute('value')==shema[shema.length-1]),
+        ...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),
+        tag_hr[0].id);
     }
   }
 };
 function before_stop(event){ stop_function(event.target.nodeName);}
 function start(e){ 
-   shema.push(this.getAttribute('value')); 
-    tag_hr=document.getElementsByTagName('hr');
-    turnCircleActive( this ,true);
-    hr_creation(this.getAttribute('value'));
+    shema.push(this.getAttribute('value')); 
+    tag_hr=document.getElementsByTagName('hr'); 
+    turnCircleActive(this); //,true
+    hr_creation(this.getAttribute('value')); 
     document.addEventListener('mousemove',how_function[type_sch]);
     document.addEventListener('mouseup',before_stop);
+
+
    // document.addEventListener('touchmove',how_function[type_sch]);
-   document.addEventListener('touchmove',function(e){
+
+
+
+  //  document.addEventListener('touchmove',function(e){
    
-   let t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);
+  //  let t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);
  
    
-    if(t.nodeName==="circle"){ 
-       // response_msg.textContent=  c+'cccmalki'+ t;
-      if(shema.includes(t.getAttribute('value'))===false){
+  //   if(t.nodeName==="circle"){ 
+  //      // response_msg.textContent=  c+'cccmalki'+ t;
+  //     if(shema.includes(t.getAttribute('value'))===false){
         
-         shema.push(t.getAttribute('value'));
-         manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
-         turnCircleActive( t ,true); 
-         hr_creation(t.getAttribute('value'));
-      }else{ c++;
-       // response_msg.textContent= c+t.target.nodeName;
-      }
-    }else{  
-       manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-1]),...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),tag_hr[0].className);
-    }
+  //        shema.push(t.getAttribute('value'));
+  //        manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-2]),...geo(...center_circle[t.getAttribute('value')],...center_circle[shema[shema.length-2]]),tag_hr[0].className);
+  //        turnCircleActive( t); // ,trueconsole.log('rrr',t.getAttribute('value'));
+  //        hr_creation(t.getAttribute('value'));
+  //     }else{ c++;
+  //      // response_msg.textContent= c+t.target.nodeName;
+  //     }
+  //   }else{  
+  //      manipulation_css(...Array.from(svg_cirlces).filter(f=>f.getAttribute('value')==shema[shema.length-1]),...geo(t.clientY,t.clientX,center_circle[shema[shema.length-1]][0]+cd121.getBoundingClientRect().top,center_circle[shema[shema.length-1]][1]+cd121.getBoundingClientRect().left),tag_hr[0].className);
+  //   }
   
-    });
+  //   });
+
+
    document.addEventListener('touchend',before_stop);
 }
 
     
 for(x=0;x<svg_cirlces.length;x++){  
    svg_cirlces[x].addEventListener('mousedown',start);
-   svg_cirlces[x].addEventListener('touchstart',start);   
+  //  svg_cirlces[x].addEventListener('touchstart',start);   
 }
 
-var cd0=document.getElementsByClassName('cd0');
-var cd00=document.getElementsByClassName('cd00'); 
+// var cd0=document.getElementsByClassName('cd0');
+// var cd00=document.getElementsByClassName('cd00'); 
  
