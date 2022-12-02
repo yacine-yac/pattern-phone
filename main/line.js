@@ -1,7 +1,16 @@
+/**
+ * How the line it will be dry 
+ * @property {string} id it represent the id of line (unique)
+ * @property {number} leftPosition the left position of the line
+ * @property {number} rightPosition the right position of the line
+ */
+
 class Line{ 
 
     constructor(id){
         this.id=id;
+        this.leftPosition=null;
+        this.topPosition =null;
     }
     /**
      * Create line by hr tag
@@ -19,13 +28,13 @@ class Line{
     * @param {*} height 
     * @param {*} seg 
     */
-    linePosition(position,angle=0,height=0,seg){ 
-        const {top,left}=position;
+    linePosition(angle=0,height=0,seg){ 
+        // const {top,left}=position;
         Object.assign(document.getElementById(seg).style,{
               transform:`rotate(${angle}deg)`,
               width:`${height-5}px`,
-              top:`${top}px`,
-              left:`${left}px`
+              top:`${this.topPosition}px`,
+              left:`${this.leftPosition}px`
         }); 
     }
     /**
@@ -35,15 +44,11 @@ class Line{
     */
     calculPosition(selector){  
         const element=document.querySelector(selector);
-        const top=element.parentElement.getBoundingClientRect().height/2+element.parentElement.getBoundingClientRect().top;
-        const left=(element.parentElement.getBoundingClientRect().width/2+element.parentElement.getBoundingClientRect().left);
-        return {top,left}
-    }
-    // static call(){
-    //     return   Line.obj ==null ? new Line() : Line.obj;
-    // }  
-}
-// console.log(Line.call());
+        this.topPosition=element.parentElement.getBoundingClientRect().height/2+element.parentElement.getBoundingClientRect().top;
+        this.leftPosition=(element.parentElement.getBoundingClientRect().width/2+element.parentElement.getBoundingClientRect().left);
+        return this;
+    } 
+} 
 
 class LineList{
     constructor(){
@@ -59,6 +64,11 @@ class LineList{
     getCurrentLine(){
         return this.current;
     }
+    clear(){
+       this.Lines=[];
+       this.current=null;
+       this.length=0;
+    } 
 }
 
 export  {Line,LineList};

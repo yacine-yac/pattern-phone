@@ -20,16 +20,16 @@ class Circle{
 class CircleList{
     constructor(elements){
         this.elements=elements;
-        this.circles=[];
+        this.circles={};
         this.setCirclesCenter();
     }
     setCirclesCenter(){
         this.elements.forEach((x)=>{
             //circle size with his svg tag (parent element)
-           let circleSize=x.parentElement.getBoundingClientRect();//console.log(x,circleSize.top);
-           let outArea=x.parentElement.parentElement.getBoundingClientRect();
-           this.circles.push(new Circle(circleSize,outArea));
- 
+           const circleSize=x.parentElement.getBoundingClientRect(); 
+           const outArea=x.parentElement.parentElement.getBoundingClientRect();
+        //    this.circles.push(new Circle(circleSize,outArea));
+           this.circles[x.getAttribute('value')]=new Circle(circleSize,outArea);
         });
     }
     getCircle(index){

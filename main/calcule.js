@@ -2,10 +2,10 @@
  * handle calcule operations of Angle and distance between two pointes 
  */
 class Calcule{
-  constructor(point1,point2){
-     this.point1=point1;
-     this.point1=point2;
-  }
+//   constructor(point1,point2){
+//      this.point1=point1;
+//      this.point1=point2;
+//   }
  /**
  * Determine the distance between origin point and mouse coordinates
  * @param {[number,number]} start  orgine point (on circle) (y1,x1)
@@ -27,11 +27,11 @@ class Calcule{
  * @returns {number} the Angle for Line
  */
     defineAngle(start,end){
-        const [y1,x1]=start;
-        const [y2,x2]=end;
+        const [x1,y1]=start;
+        const [x2,y2]=end;
         const xLength=x1-x2;
         const yLength=y1-y2; 
-    
+        let angle;
         if(xLength>0 && yLength>0){
             angle=Math.atan(yLength/xLength)*180/Math.PI;
         }else if(xLength<0 && yLength==0){
