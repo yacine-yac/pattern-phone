@@ -1,5 +1,5 @@
 /**
- * How the line it will be dry 
+ * How the line it will be draw 
  * @property {string} id it represent the id of line (unique)
  * @property {number} leftPosition the left position of the line
  * @property {number} rightPosition the right position of the line
@@ -64,6 +64,9 @@ class LineList{
     getCurrentLine(){
         return this.current;
     }
+    /**
+     * It turns the object in his initial state
+     */
     clear(){
        this.Lines=[];
        this.current=null;

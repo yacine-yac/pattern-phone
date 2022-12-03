@@ -14,12 +14,12 @@ circlesElement=document.querySelectorAll('svg circle');
 // let response_msg=document.getElementById('response_msg'); N
 var tag_hr;
 let shema=[];
-
-const circlesCenter=new CircleList(circlesElement).circles;  
+const circles=new CircleList(circlesElement);
+const circlesCenter=circles.circles;  
 const lines=new LineList();
-console.log(lines);
+// console.log(lines);
 // const type_sch=cd121.getAttribute('data-value');
-const box=document.getElementById('box');
+// const box=document.getElementById('box');
 
 
  
@@ -28,17 +28,17 @@ const box=document.getElementById('box');
  * @param {*} circle The circle which will be active 
  * @returns void 
  */
-function turnCircleActive(circle){  
-  circle.classList.add("circle-active"); 
-}
+// function turnCircleActive(circle){  
+//   circle.classList.add("circle-active"); 
+// }
 /** Turn All circles inactive using circles elements
  *  @return void
  */
-function clearCircle(){
-  Array.from(circlesElement,x=>{ 
-    x.classList.replace("circle-active",'cirlce');
-  });
-}
+// function turnCirclesOff(){
+//   Array.from(circlesElement,x=>{ 
+//     x.classList.replace("circle-active",'cirlce');
+//   });
+// }
 
 
 /**
@@ -81,7 +81,7 @@ function clearCircle(){
  * occurs when the mouse stop moving 
  * @param {*} event event parameter 
  */
-function stop(event){ 
+function stop(event){ //console.log('ee',lines);
       if(shema.length>0){   
           document.removeEventListener("mousemove",move);
             // document.removeEventListener("touchmove");
@@ -89,7 +89,7 @@ function stop(event){
                   tag_hr[0].remove();
           }
           setTimeout(()=>{
-                    clearCircle(); 
+                   circles.turnCirclesOff(); 
                     Array.from(tag_hr).forEach((x)=>{x.remove()});
                     shema=[];
                     lines.clear();
@@ -147,7 +147,6 @@ function stop(event){
 function move(t){
   const calcule=new Calcule();  
   if(t.target.nodeName==="circle"){
-         
         if(shema.includes(t.target.getAttribute('value'))===false){ 
           shema.push(t.target.getAttribute('value')); 
           //tempororay
@@ -160,20 +159,22 @@ function move(t){
                    
            ]; 
           lines.current
-               .calculPosition(`circle[value=${shema[shema.length-2]}]`)
-               .linePosition( calcule.defineAngle(p1,p2),  
+                       .calculPosition(`circle[value=${shema[shema.length-2]}]`)
+                       .linePosition( calcule.defineAngle(p1,p2),  
                               calcule.defineDistance(p1,p2),    
                               tag_hr[0].id
                             );  
-          turnCircleActive(t.target); 
+         // turnCircleActive(t.target); 
+          circles.getCircle(t.target.getAttribute('value')).turnCircleActive();
           lines.add(new Line(t.target.getAttribute('value'))); 
+          lines.current.create();
         } 
   }else{ 
         let p1=[t.clientX,t.clientY];
         let p2=[
            circlesCenter[shema[shema.length-1]]["x"]+cd121.getBoundingClientRect().left,
            circlesCenter[shema[shema.length-1]]["y"]+cd121.getBoundingClientRect().top
-        ]; 
+        ];  
          lines.current
                .calculPosition(`circle[value=${shema[shema.length-1]}]`)
                .linePosition(
@@ -188,7 +189,8 @@ function move(t){
 function start(e){ 
     shema.push(this.getAttribute('value')); 
     tag_hr=document.getElementsByTagName('hr'); 
-    turnCircleActive(this);  
+    // turnCircleActive(this);  
+    circles.getCircle(this.getAttribute('value')).turnCircleActive(); 
     lines.add(new Line(this.getAttribute('value'))); 
     lines.current.create();
     document.addEventListener('mousemove',move);//how_function[type_sch]
