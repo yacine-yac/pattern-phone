@@ -18,19 +18,17 @@ class Line{
      */
    
     create(){ 
-        let hr=`<hr id="${this.id}">`;  
+        let hr=`<hr id=${this.id} >`;  
         cd121.insertAdjacentHTML("afterbegin",hr);
     }
    /**
     * Define the emplacement of the the line (position,angle,height)
-    * @param {*} position 
-    * @param {*} angle 
-    * @param {*} height 
-    * @param {*} seg 
+    * @param {Calcule} calcule object handle hande the angle and height value
     */
-    linePosition(angle=0,height=0,seg){ 
-        // const {top,left}=position;
-        Object.assign(document.getElementById(seg).style,{
+    setLinePosition(calcule){  
+        const angle= calcule.defineAngle();
+        const height=calcule.defineDistance();
+        Object.assign(document.getElementById(this.id).style,{
               transform:`rotate(${angle}deg)`,
               width:`${height-5}px`,
               top:`${this.topPosition}px`,
@@ -39,17 +37,25 @@ class Line{
     }
     /**
      * get the start position of the line created
-     * @param {*} selector 
-     * @returns 
+     * @param {Circle} circle provide circle tag   
+     * @returns {Line} 
     */
-    calculPosition(selector){  
-        const element=document.querySelector(selector);
-        this.topPosition=element.parentElement.getBoundingClientRect().height/2+element.parentElement.getBoundingClientRect().top;
-        this.leftPosition=(element.parentElement.getBoundingClientRect().width/2+element.parentElement.getBoundingClientRect().left);
+    calculPosition(circle){ 
+        this.topPosition=circle.element.parentElement.getBoundingClientRect().height/2+circle.element.parentElement.getBoundingClientRect().top;
+        this.leftPosition=(circle.element.parentElement.getBoundingClientRect().width/2+circle.element.parentElement.getBoundingClientRect().left);
         return this;
-    } 
+    }
+    /**
+     * Remove the current circle from DOM 
+     */ 
+    remove(){
+        document.getElementById(this.id).remove();
+    }
 } 
-
+/**
+ * 
+ * @property {Circle | null} current the current circle which mouse pass on it 
+ */
 class LineList{
     constructor(){
        this.Lines=[];
@@ -67,7 +73,8 @@ class LineList{
     /**
      * It turns the object in his initial state
      */
-    clear(){
+    clear(){ 
+       this.Lines.forEach(x=>x.remove());
        this.Lines=[];
        this.current=null;
        this.length=0;

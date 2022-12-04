@@ -1,7 +1,8 @@
 /**
  * define circle top and left position 
- *  @param circleSize represent the svg parent of circle size and position
- *  @param outArea   represent the the outdoor area of svg circle position
+ *  @property {number} circleSize represent the svg parent of circle size and position
+ *  @property {number} outArea   represent the the outdoor area of svg circle position
+ *  @property {HTMLElement} element Circle tag
  */
 class Circle{
     constructor(element,circleSize,outArea){ 
@@ -26,17 +27,26 @@ class Circle{
      *  Turn the circle Active by adding class style (circle-active)
      * @returns void 
     */
-    turnCircleActive(){
+    setCircleActive(){
             this.status=true;  
             this.element.classList.add("circle-active"); 
     } 
 }
 
+/**
+ * Which handle the collection of circles 
+ *  @param {HTMLElement} elements collection of circles tag
+ *  @property {{key:Circle{}}} circles circles objects by value key 
+ */
+
 class CircleList{
     constructor(elements){ 
         this.elements=elements;
         this.circles={};
+        this.globalStatus=false;
         this.setCirclesCenter();
+        this.precendentCircle=null;
+        this.currentCircle=null;
     }
     setCirclesCenter(){
         this.elements.forEach((x)=>{
@@ -64,6 +74,15 @@ class CircleList{
                 x[1].element.classList.replace("circle-active",'cirlce'),
                 x[1].status=false);
         });
+    }
+    turnCircleActive(value){
+          const circle=this.circles[value]
+          circle.status===false 
+             && (
+                 circle.setCircleActive(),
+                 this.precendentCircle=this.currentCircle,
+                 this.currentCircle=circle
+                );
     }
 }
 

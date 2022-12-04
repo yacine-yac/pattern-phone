@@ -20,12 +20,12 @@ const lines=new LineList();
  */
 function stop(){ 
       if(circles.globalStatus){   
-          document.removeEventListener("mousemove",move);
+          document.removeEventListener("mousemove",move); 
           setTimeout(()=>{
                     circles.turnCirclesOff();  
                     circles.globalStatus=false;
                     lines.clear();
-                    document.removeEventListener('mousedown',stop);
+                    document.removeEventListener('mousedown',stop); 
           },400);  
       } 
 } 
@@ -37,24 +37,20 @@ function stop(){
  */
 function move(t){ 
   const currentvalue =t.target.getAttribute('value');
-  if(t.target.nodeName==="circle"){
-        if(circles.circles[currentvalue].status===false){  
+  if(t.target.nodeName==="circle" && circles.circles[currentvalue].status===false){ 
           circles.turnCircleActive(currentvalue);   
           let p1=[circles.currentCircle["x"],circles.currentCircle["y"]];
           let p2=[circles.precendentCircle['x'],circles.precendentCircle["y"]];
-          lines.current
-                       .calculPosition(circles.precendentCircle)
+          lines.current.calculPosition(circles.precendentCircle)
                        .setLinePosition(new Calcule(p1,p2));  
           lines.add(new Line(currentvalue)); 
-          lines.current.create();
-        } 
+          lines.current.create(); 
   }else{ 
         let p1=[t.clientX,t.clientY];   
         let p2=[circles.currentCircle["x"]+cd121.getBoundingClientRect().left,
         circles.currentCircle['y']+cd121.getBoundingClientRect().top]; 
-         lines.current
-               .calculPosition(circles.currentCircle)
-               .setLinePosition(new Calcule(p1,p2));
+         lines.current.calculPosition(circles.currentCircle)
+                      .setLinePosition(new Calcule(p1,p2));
   }
 }
 
@@ -71,6 +67,6 @@ function start(){
 
     
 for(let x=0;x<circlesElement.length;x++){  
-   circlesElement[x].addEventListener('mousedown',start);  
+   circlesElement[x].addEventListener('mousedown',start);   
 }
  
