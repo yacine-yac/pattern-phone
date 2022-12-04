@@ -2,19 +2,19 @@
  * handle calcule operations of Angle and distance between two pointes 
  */
 class Calcule{
-//   constructor(point1,point2){
-//      this.point1=point1;
-//      this.point1=point2;
-//   }
+  constructor(firstPoint,secondPoint){
+     this.firstPoint=firstPoint;
+     this.secondPoint=secondPoint;
+  }
  /**
  * Determine the distance between origin point and mouse coordinates
  * @param {[number,number]} start  orgine point (on circle) (y1,x1)
  * @param {[number,number]} end    mouse coordinates        (y2,y1); 
  * @returns {number}  distance which is the line Height
  */ 
-    defineDistance(start,end){
-        const [x1,y1]=start;
-        const [x2,y2]=end;
+    defineDistance(){
+        const [x1,y1]=this.firstPoint;
+        const [x2,y2]=this.secondPoint;
         const xLength=x1-x2;
         const yLength=y1-y2; 
         return Math.sqrt(xLength**2+yLength**2); 
@@ -22,36 +22,18 @@ class Calcule{
 
     /**
  * Determine the angle between line vector in the init state and the vector moved by mouse
- * @param {[number,number]} start  orgine point (on circle) (y1,x1)
- * @param {[number,number]} end    mouse coordinates        (y2,y1); 
+ * @param {[number,number]} this.firstPoint  orgine point (on circle) (y1,x1)
+ * @param {[number,number]} this.secondPoint    mouse coordinates        (y2,y1); 
  * @returns {number} the Angle for Line
  */
-    defineAngle(start,end){
-        const [x1,y1]=start;
-        const [x2,y2]=end;
+    defineAngle(){
+        const [x1,y1]=this.firstPoint;
+        const [x2,y2]=this.secondPoint;
         const xLength=x1-x2;
-        const yLength=y1-y2; 
-        let angle;
-        if(xLength>0 && yLength>0){
-            angle=Math.atan(yLength/xLength)*180/Math.PI;
-        }else if(xLength<0 && yLength==0){
-            angle=180;
-        }else if(xLength>0 && yLength==0){
-            angle=0;
-        }else if(xLength===0 && yLength==0){
-            angle=0;  
-        }else if(xLength===0 && yLength<0){
-            angle=-90;
-        }else if(xLength===0 && yLength>0){
-            angle=90; 
-        }else if(xLength>0 && yLength<0){
-            angle=(Math.atan(yLength/xLength)*180/Math.PI);
-        }else if(xLength<0 && yLength>0){
-            angle=180+Math.atan(yLength/xLength)*180/Math.PI;
-        }else if(xLength<0 && yLength<0){
-            angle=180+Math.atan(yLength/xLength)*180/Math.PI;
-        }   
-        return angle;
+        const yLength=y1-y2;  
+        return (xLength< 0 || xLength<0 && yLength<0)
+                    ?  180+Math.atan(yLength/xLength)*180/Math.PI
+                    :  Math.atan(yLength/xLength)*180/Math.PI; 
     }
 
 
