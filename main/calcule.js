@@ -1,5 +1,7 @@
 /**
  * handle calcule operations of Angle and distance between two pointes 
+ * @property {[number,number]} firstPoint point with (x,y)
+ * @property {[number,number]} secondPoint point with (x,y)
  */
 class Calcule{
   constructor(firstPoint,secondPoint){
@@ -7,9 +9,7 @@ class Calcule{
      this.secondPoint=secondPoint;
   }
  /**
- * Determine the distance between origin point and mouse coordinates
- * @param {[number,number]} start  orgine point (on circle) (y1,x1)
- * @param {[number,number]} end    mouse coordinates        (y2,y1); 
+ * Determine the distance between origin point and mouse coordinates 
  * @returns {number}  distance which is the line Height
  */ 
     defineDistance(){
@@ -21,9 +21,7 @@ class Calcule{
     }
 
     /**
- * Determine the angle between line vector in the init state and the vector moved by mouse
- * @param {[number,number]} this.firstPoint  orgine point (on circle) (y1,x1)
- * @param {[number,number]} this.secondPoint    mouse coordinates        (y2,y1); 
+ * Determine the angle between line vector in the init state and the vector moved by mouse 
  * @returns {number} the Angle for Line
  */
     defineAngle(){
