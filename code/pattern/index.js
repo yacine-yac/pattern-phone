@@ -1,6 +1,6 @@
 import { Line } from "../../main/line.js";
 import Calcule from "../../main/calcule.js";
-import { handlerMove,handlerStop } from "../code.js";
+import { handlerMove,handlerStop } from "../handlers.js";
 /**
  * occurs when the mouse stop moving  
  */
@@ -14,6 +14,7 @@ class Pattern{
      * @param {HTMLElement} divLocation 
      * @param {string} events 
      * @property {HTMLElement | null} currentTag It's refer to the current HTML element Targeted
+     * @property {[number,number]} currentTagCoordinates return the current coordinates of the (mouse / touch)
      */
     constructor(circles,lines,divLocation,events){
         this.circles=circles;
@@ -34,8 +35,7 @@ class Pattern{
         this.lines.current.create();   
     }
     /**
-     * declenched when the mouse start moving
-     * @param {MouseEvent} t event parameter 
+     * declenched when the mouse start moving 
      * @return void
      */
     move(){
@@ -48,12 +48,12 @@ class Pattern{
                             .setLinePosition(new Calcule(p1,p2));  
                 this.lines.add(new Line(currentvalue)); 
                 this.lines.current.create(); 
-        }else{
-            // let p1=[currentItem.clientX,currentItem.clientY];   
-            let p2=[this.circles.currentCircle["x"]+this.divLocation.getBoundingClientRect().left,
-            this.circles.currentCircle['y']+this.divLocation.getBoundingClientRect().top]; 
-//    console.log(this.currentTag,'g',this.currentTagCoordinates )
-               this.lines.current.calculPosition(this.circles.currentCircle)
+        }else{ 
+            let p2=[
+                this.circles.currentCircle["x"]+this.divLocation.getBoundingClientRect().left,
+                this.circles.currentCircle['y']+this.divLocation.getBoundingClientRect().top
+            ]; 
+            this.lines.current.calculPosition(this.circles.currentCircle)
                             .setLinePosition(new Calcule(this.currentTagCoordinates,p2));
         }
     }
@@ -67,7 +67,7 @@ class Pattern{
             setTimeout(()=>{
                       this.circles.turnCirclesOff();  
                       this.circles.globalStatus=false;
-                      this.lines.clear();
+                      this.lines.clear(); 
                       this.divLocation.removeEventListener(this.events.start,handlerStop); 
             },400);  
         } 

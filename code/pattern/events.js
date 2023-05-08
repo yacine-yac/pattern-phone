@@ -15,8 +15,7 @@ export default class PatternEvents{
     }
     /**This method will set type value property base on the type of device (mobile or desktop) */
     setType(){
-        const phoneDevices= /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-        console.log(phoneDevices.test(navigator.userAgent))
+        const phoneDevices= /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i; 
         if(phoneDevices.test(navigator.userAgent)){
             //Phone 
             this.type='touch';
