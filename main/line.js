@@ -27,7 +27,7 @@ class Line{
     */
     setLinePosition(calcule){  
         const angle= calcule.defineAngle();
-        const height=calcule.defineDistance();
+        const height=calcule.defineDistance();  
         Object.assign(document.getElementById(this.id).style,{
               transform:`rotate(${angle}deg)`,
               width:`${height-5}px`,
@@ -43,7 +43,7 @@ class Line{
     calculPosition(circle){ 
         this.topPosition=circle.element.parentElement.getBoundingClientRect().height/2+circle.element.parentElement.getBoundingClientRect().top;
         this.leftPosition=(circle.element.parentElement.getBoundingClientRect().width/2+circle.element.parentElement.getBoundingClientRect().left);
-        return this;
+          return this;
     }
     /**
      * Remove the current circle from DOM 
