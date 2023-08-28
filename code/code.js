@@ -1,8 +1,8 @@
 import Calcule from "../main/calcule.js";
 import CircleList from "../main/circles.js";
 import {Line,LineList} from "../main/line.js";
-import PatternEvents from "./Pattern/events.js";
-import Pattern from "./Pattern/index.js";
+import PatternEvents from "./pattern/events.js";
+import Pattern from "./pattern/index.js";
 import { handlerMove,handlerStop } from "./handlers.js";
 
 /**
